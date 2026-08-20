@@ -1,37 +1,32 @@
-version: '3.8'
-
 services:
+  # ── Backend (FastAPI + RAG Pipeline) ────────────────────
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: synkro-backend
     ports:
-      - "8000:8000"
+      - "${BACKEND_PORT:-8000}:8000"
+    env_file:
+      - .env
     environment:
       - PORT=8000
       - HOST=0.0.0.0
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-text-embedding-3-small}
-      - LLM_MODEL=${LLM_MODEL:-gpt-4o-mini}
       - CHUNKS_PATH=/app/data/Synkro-data.json
-      # - DOCUMENTS_PATH=/app/data/documents
     volumes:
-      - ./data:/app/data
+      # Knowledge base data – read-only for the backend
+      - ./data:/app/data:ro
+      # HuggingFace / sentence-transformers model cache
+      # Persists the ~2 GB BAAI/bge-m3 download across rebuilds
+      - model-cache:/home/appuser/.cache
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
-      interval: 10s
+      interval: 30s
       timeout: 5s
+      start_period: 60s
       retries: 3
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
-    depends_on:
-      - backend
-    restart: unless-stopped
+volumes:
+  model-cache:
+    driver: local
