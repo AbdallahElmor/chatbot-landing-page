@@ -22,8 +22,7 @@ COPY requirements.txt .
 # --mount=type=cache persists downloaded wheels across builds (BuildKit only)
 # torch/CUDA index swapped for CPU-only wheels — cuts that download from ~500MB to ~200MB
 # remove the --extra-index-url line if you actually need GPU support
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv pip install --system \
+RUN uv pip install --system \
     --index-strategy unsafe-best-match \
     --extra-index-url https://download.pytorch.org/whl/cpu \
     -r requirements.txt
@@ -33,6 +32,7 @@ COPY app ./app
 # ── Non-root user ────────────────────────────
 RUN groupadd --gid 1000 appuser \
     && useradd --uid 1000 --gid appuser --create-home appuser \
+    && mkdir -p /home/appuser/.cache/huggingface \
     && chown -R appuser:appuser /app
 
 USER appuser
