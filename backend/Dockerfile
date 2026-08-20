@@ -27,12 +27,16 @@ RUN uv pip install --system \
     --extra-index-url https://download.pytorch.org/whl/cpu \
     -r requirements.txt
 
+
+ENV HF_HOME=/app/.cache/huggingface
+
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('BAAI/bge-small-en-v1.5')"
+
 COPY app ./app
 
 # ── Non-root user ────────────────────────────
 RUN groupadd --gid 1000 appuser \
     && useradd --uid 1000 --gid appuser --create-home appuser \
-    && mkdir -p /home/appuser/.cache/huggingface \
     && chown -R appuser:appuser /app /home/appuser/.cache
 
 USER appuser
