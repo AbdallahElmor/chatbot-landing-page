@@ -37,7 +37,7 @@ COPY app ./app
 # ── Non-root user ────────────────────────────
 RUN groupadd --gid 1000 appuser \
     && useradd --uid 1000 --gid appuser --create-home appuser \
-    && chown -R appuser:appuser /app /home/appuser/.cache
+    && chown -R appuser:appuser /app 
 
 USER appuser
 
