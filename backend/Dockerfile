@@ -28,6 +28,7 @@ RUN uv pip install --system \
     -r requirements.txt
 
 COPY app ./app
+COPY data ./data
 
 # ── Non-root user ────────────────────────────
 RUN groupadd --gid 1000 appuser \
