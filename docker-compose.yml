@@ -13,8 +13,8 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - EMBEDDING_MODEL=${EMBEDDING_MODEL:-text-embedding-3-small}
       - LLM_MODEL=${LLM_MODEL:-gpt-4o-mini}
-      - CHUNKS_PATH=/app/data/knowledge/chunks.json
-      - DOCUMENTS_PATH=/app/data/documents
+      - CHUNKS_PATH=/app/data/Synkro-data.json
+      # - DOCUMENTS_PATH=/app/data/documents
     volumes:
       - ./data:/app/data
     restart: unless-stopped
