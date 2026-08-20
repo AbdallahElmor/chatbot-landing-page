@@ -3,6 +3,10 @@ from pathlib import Path
 from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+# Resolved once at import time — works both locally and in Docker
+_BASE_DIR = Path(__file__).resolve().parent.parent.parent
+_PROJECT_ROOT = _BASE_DIR.parent
+
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Synkro AI API"
     VERSION: str = "1.0.0"
@@ -23,17 +27,16 @@ class Settings(BaseSettings):
     OPENAI_MODEL: Optional[str] = "openai/gpt-oss-20b"
     GEMINI_MODEL: Optional[str] = "gemini-2.5-flash"
     
-    # Paths
-    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
-    DATA_DIR: Path = (BASE_DIR / ".." / "data").resolve()
-    CHUNKS_PATH: Path = BASE_DIR / ".." / "data" / "Synkro-data.json"
+
+    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent.parent
+    DATA_DIR: Path = BASE_DIR / "data"
+    CHUNKS_PATH: Path = DATA_DIR / "Synkro-data.json"
 
     model_config = SettingsConfigDict(
         # Resolve .env relative to this file: backend/app/core/ -> go up 4 levels to project root
-        env_file=str(Path(__file__).resolve().parent.parent.parent.parent / ".env"),
+        env_file=str(_PROJECT_ROOT / ".env"),
         env_file_encoding="utf-8",
         extra="ignore",
     )
-
 
 settings = Settings()

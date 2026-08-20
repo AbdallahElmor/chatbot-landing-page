@@ -28,13 +28,12 @@ RUN uv pip install --system \
     -r requirements.txt
 
 COPY app ./app
-COPY data ./data
 
 # ── Non-root user ────────────────────────────
 RUN groupadd --gid 1000 appuser \
     && useradd --uid 1000 --gid appuser --create-home appuser \
     && mkdir -p /home/appuser/.cache/huggingface \
-    && chown -R appuser:appuser /app
+    && chown -R appuser:appuser /app /home/appuser/.cache
 
 USER appuser
 
