@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     # AI & Embeddings
     GROQ_API_KEY: Optional[str] = None        # Groq API key (used for LLM generation)
     OPENAI_API_KEY: Optional[str] = None      # Kept for compatibility
-    EMBEDDING_MODEL: Optional[str] = "BAAI/bge-m3"
+    EMBEDDING_MODEL: Optional[str] = "gemini-embedding-001"
     GEMINI_API_KEY: Optional[str] = None
 
     OPENAI_MODEL: Optional[str] = "openai/gpt-oss-20b"

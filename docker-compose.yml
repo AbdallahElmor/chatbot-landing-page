@@ -16,17 +16,10 @@ services:
     volumes:
       # Knowledge base data – read-only for the backend
       - ./data:/app/data:ro
-      # HuggingFace / sentence-transformers model cache
-      # Persists the ~2 GB BAAI/bge-m3 download across rebuilds
-      - model-cache:/home/appuser/.cache
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
       timeout: 5s
-      start_period: 60s
+      start_period: 30s
       retries: 3
-
-volumes:
-  model-cache:
-    driver: local
