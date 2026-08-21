@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     GEMINI_MODEL: Optional[str] = "gemini-2.5-flash"
     
 
-    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent.parent
+    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent.parent  # backend/
     DATA_DIR: Path = BASE_DIR / "data"
     CHUNKS_PATH: Path = DATA_DIR / "Synkro-data.json"
 
